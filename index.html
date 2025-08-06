@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestor de Licencias de Software</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- FontAwesome para los iconos - me ahorra mucho trabajo -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1><i class="fas fa-key"></i> Gestor de Licencias</h1>
+            <p class="subtitle">Automatización de renovaciones de software</p>
+        </header>
+
+        <div class="dashboard">
+            <div class="stats">
+                <div class="stat-card">
+                    <i class="fas fa-calendar-alt"></i>
+                    <div class="stat-info">
+                        <span class="stat-number" id="totalLicenses">0</span>
+                        <span class="stat-label">Licencias</span>
+                    </div>
+                </div>
+                <div class="stat-card warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <div class="stat-info">
+                        <span class="stat-number" id="expiringSoon">0</span>
+                        <span class="stat-label">Expiran pronto</span>
+                    </div>
+                </div>
+                <div class="stat-card danger">
+                    <i class="fas fa-times-circle"></i>
+                    <div class="stat-info">
+                        <span class="stat-number" id="expired">0</span>
+                        <span class="stat-label">Expiradas</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button class="btn btn-primary" onclick="openModal()">
+                    <i class="fas fa-plus"></i> Agregar Licencia
+                </button>
+                <button class="btn btn-secondary" onclick="exportData()">
+                    <i class="fas fa-download"></i> Exportar
+                </button>
+                <button class="btn btn-secondary" onclick="importData()">
+                    <i class="fas fa-upload"></i> Importar
+                </button>
+                <button class="btn btn-info" onclick="toggleNotifications()">
+                    <i class="fas fa-bell"></i> <span id="notificationStatus">Activar Notificaciones</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="filters">
+            <input type="text" id="searchInput" placeholder="Buscar licencias..." class="search-input">
+            <select id="statusFilter" class="filter-select">
+                <option value="all">Todos los estados</option>
+                <option value="active">Activas</option>
+                <option value="expiring">Expiran pronto</option>
+                <option value="expired">Expiradas</option>
+            </select>
+        </div>
+
+        <div class="table-container">
+            <table class="licenses-table">
+                <thead>
+                    <tr>
+                        <th>Software</th>
+                        <th>Fecha de Renovación</th>
+                        <th>Días Restantes</th>
+                        <th>Monto</th>
+                        <th>Responsable</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="licensesTableBody">
+                    <!-- aqui se cargan los datos solos de forma dinamica -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal para agregar/editar licencias -->
+    <div id="licenseModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">Agregar Nueva Licencia</h2>
+                <span class="close" onclick="closeModal()">&times;</span>
+            </div>
+            <form id="licenseForm" class="modal-form">
+                <div class="form-group">
+                    <label for="softwareName">Nombre del Software *</label>
+                    <input type="text" id="softwareName" required>
+                </div>
+                <div class="form-group">
+                    <label for="renewalDate">Fecha de Renovación *</label>
+                    <input type="date" id="renewalDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="amount">Monto *</label>
+                    <input type="number" id="amount" step="0.01" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="responsible">Persona Responsable *</label>
+                    <input type="text" id="responsible" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email del Responsable</label>
+                    <input type="email" id="email">
+                </div>
+                <div class="form-group">
+                    <label for="notes">Notas</label>
+                    <textarea id="notes" rows="2"></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de confirmacion -->
+    <div id="confirmModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Confirmar Acción</h2>
+                <span class="close" onclick="closeConfirmModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p id="confirmMessage">¿Estás seguro de que quieres realizar esta acción?</p>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" onclick="closeConfirmModal()">Cancelar</button>
+                <button class="btn btn-danger" id="confirmButton">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- notificaciones -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- js -->
+    <script src="config.js"></script>
+    <script src="app.js"></script>
+</body>
+</html> 
