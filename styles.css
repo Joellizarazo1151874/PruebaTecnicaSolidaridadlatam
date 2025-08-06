@@ -294,13 +294,17 @@ body {
 
 .modal-content {
     background-color: var(--surface-color);
-    margin: 5% auto;
+    margin: 2% auto;
     padding: 0;
     border-radius: var(--border-radius);
     width: 90%;
     max-width: 500px;
+    max-height: 90vh;
     box-shadow: var(--shadow-lg);
     animation: modalSlideIn 0.3s ease-out;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
 }
 
 @keyframes modalSlideIn {
@@ -478,7 +482,8 @@ body {
 
     .modal-content {
         width: 95%;
-        margin: 10% auto;
+        margin: 1% auto;
+        max-height: 95vh;
     }
 
     .form-actions,
